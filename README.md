@@ -80,11 +80,19 @@ Tip: When making writing your conclusions to the statistical tests in this proje
 
 ## Fairness Analysis
 
-We chose to run fairness analysis on the states in West side and states that are **not** in West side, evaluated on whether the cause of power outage in that event is severe weather or not.
+We were curious to know if our model was fair in predicting the cause of outages for Western regions and Non-Western regions. 
 
-**Null Hypothesis**: Probability of the causation of power outage being severe weather is the same for both states in West side and states that are not in West side. Any differences are due to random chance.
 
-**Alternative Hypothesis**: Probability of the causation of power outage being severe weather is higher for states that are not in West side.
+C: Decision Tree Classifier (1 if predicts severe weather as cause of outage , 0 if predicts otherwise) 
+
+Y: Whether or not cause of outage was truly because of severe weather (1) or due to other reason (0)
+
+A: Whether or not the outage occurred in western region (1) or non-western region (0) 
+
+
+Null Hypothesis: The classifier’s accuracy is the same for both western regions and non-western regions, and any differences are due to random chance.
+
+Alternative Hypothesis: The classifier’s accuracy is higher for western-regions. 
 
 **Relevant Columns**\
 The three main columns necessary to perform out Permutation Test is newly generated columns, `is_west` (True if the event happened in Western state, false otherwise), `is_severe` (Whether the causation of the outage is severe weather), and `prediction`, which is predicted `is_west` based on all the other columns we used to create our final model and the newly created columns. Since we are performing the test under the null hypothesis, we must generate our test statistic from shuffling the `is_west`.
