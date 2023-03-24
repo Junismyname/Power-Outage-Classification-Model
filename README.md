@@ -201,11 +201,11 @@ We decided to use **Difference in accuracy** on Western states and non-Western s
 Repeatedly computing the difference in accuracy will generate an empirical distribution of the difference under the null hypothesis. 
 
 **Empirical Distribution of Difference in Accuracy**\
-Red Line = Observed TVD
+Red Line = Observed Accuracy
 
 <iframe src="assets/difference_in_accuracy_fairness.html" width=700 height=500 frameBorder=0></iframe>
 
-**p-value: 0.0514**
+**p-value: 0.2616**
 
 **Conclusion of Fairness Analysis**\
 The difference in accuracy across the two groups in not significant because the p-value is above the significance level of 0.05. **This means we fail to reject the null hypothesis, and C likely achieves accuracy parity.** Therefore, the classifier C is likely to be fair as it performs the same for outages that occurred in western regions and non-western regions 
