@@ -57,8 +57,8 @@ To use this data in our model, we changed it to numerical data using One Hot Enc
 
 ### Baseline Model
 We first input the collected data into Column Transformer use it in Pipeline. We kept all the numerical columns (`ANOMALY.LEVEL` and `OUTAGE.DURATION`) as they are, and modified the qualitative column `CLIMATE.REGION` using One Hot Encoder.\
-After creating Column Transformer with all the data, we initiated Pipeline along with Decision Tree Classifier.\ 
-**Prediction**
+After creating Column Transformer with all the data, we initiated Pipeline along with Decision Tree Classifier.\
+**Prediction**\
 We used train test split method to prove the accuracy of the Classifier.\
 Using pl.score(X_test, y_test) method, we calcultated the accuracy of the Classifier.\
 As a result, we got 0.638743.\
