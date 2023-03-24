@@ -27,11 +27,15 @@ There are 1534 rows and 6 columns in the dataset that are relevant to our classi
 To ensure that the insights and conclusions drawn from the data are accurate and reliable, we cleaned our dataset in the following manner:
 **1. Excel to CSV Format**
 We converted the Excel file to CSV format. Since CSV only accepts data points separated by commas, we deleted the title and description in the Excel file so that the data is readable into pandas DataFrame.
+
 **2. Filter Out Unnecessary Columns**
 Out of the 55 columns, we kept 6 and created 1 new column. The reason for dropping over a dozen columns were because they were unnecessary fitting our multiclass classification model. For example, we did not require the percentage of inland water area in the state. While it may be important data points, it was unnecessary for the scope of this project.
+
 **3. Fill NaN values in OUTAGE.DURATION**
 From previous data exploration, we discovered that the missingness of OUTAGE.DURATION depends on ‘CAUSE.CATEGORY’ with a statistically significant p-value of 0.002.  Therefore, we imputed the mean OUTAGE.DURATION conditioned on CAUSE.CATEGORY.
+
 **4. Handle NaN values in ANOMALY.LEVEL**
 Out of 1534 values, the ANOMALY.LEVEL columns contained 9 NaN values. Through data exploration, we discovered the missingness did neither depended on the region or the cause of outage. Therefore, due to its low significance, we dropped the 9 values from the DataFrame.
+
 **5. Fill NaN values in 'CUSTOMERS.AFFECTED'**
 From previous data exploration, we discovered that the missingness of 'CUSTOMERS.AFFECTED' depends on ‘CAUSE.CATEGORY’ with a statistically significant p-value of 0.0.  Therefore, we imputed the mean 'CUSTOMERS.AFFECTED' conditioned on CAUSE.CATEGORY.
