@@ -67,4 +67,37 @@ Our current model does extremely bad job at predicting the cause of power outage
 
 **Gridsearch to find best hyperparameter**
 To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those values to our Pipeline, we got 0.670157.\
-This increased accuracy by about 0.04, which is a great improvement thinking that in term of probability. However we still considered our model inaccurate because we were aiming over 0.8 accuracy. 
+This increased accuracy by about 0.04, which is a great improvement thinking that in term of probability. However we still considered our model inaccurate because we were aiming over 0.8 accuracy.\
+
+## Final Model
+
+Clearly state your choice of Group X and Group Y, your evaluation metric, your null and alternative hypotheses, your choice of test statistic and significance level, the resulting p
+-value, and your conclusion.
+
+Optional: Embed a visualization related to your permutation test in your website.
+
+Tip: When making writing your conclusions to the statistical tests in this project, never use language that implies an absolute conclusion; since we are performing statistical tests and not randomized controlled trials, we cannot prove that either hypothesis is 100% true or false.
+
+## Fairness Analysis
+
+We chose to run fairness analysis on the states in West side and states that are **not** in West side, evaluated on whether the cause of power outage in that event is severe weather or not.
+
+**Null Hypothesis**: Probability of the causation of power outage being severe weather is the same for both states in West side and states that are not in West side. Any differences are due to random chance.
+
+**Alternative Hypothesis**: Probability of the causation of power outage being severe weather is higher for states that are not in West side.
+
+**Relevant Columns**
+The three main columns necessary to perform out Permutation Test is newly generated columns, `is_west` (True if the event happened in Western state, false otherwise), `is_severe` (Whether the causation of the outage is severe weather), and `prediction`, which is predicted `is_west` based on all the other columns we used to create our final model and the newly created columns. Since we are performing the test under the null hypothesis, we must generate our test statistic from shuffling the `is_west`.
+
+**Test Statistics**
+After shuffling, we must find if Western and non-Western states have the same accuracy. To find that out, we decided to use **Difference in accuracy** on Western states and non-Western states. 
+
+Repeatedly computing the difference in accuracy will generate an empirical distribution of the difference under the null hypothesis. 
+
+**Empirical Distribution of Difference in Accuracy**
+Red Line = Observed TVD
+
+<iframe src="assets/difference_in_accuracy_fairness.html" width=700 height=500 frameBorder=0></iframe>
+
+**Conclusion**
+As a result, we calculated that **p-value on the Permutation Test is 0.0514**. With our significance level 0.1, despite being a small difference, the difference in accuracy across the two groups **is significant**. This allows us to reject Null Hypothesis and conclude that the result favors our Alternative Hypothesis. We conclude that the probability of the causation of power outage being severe weather is higher for states that are not in West side.
