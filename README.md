@@ -99,7 +99,6 @@ Red Line = Observed TVD
 
 <iframe src="assets/difference_in_accuracy_fairness.html" width=700 height=500 frameBorder=0></iframe>
 
-<<<<<<< HEAD
 **Conclusion**
 As a result, we calculated that **p-value on the Permutation Test is 0.0514**. With our significance level 0.1, despite being a small difference, the difference in accuracy across the two groups **is significant**. This allows us to reject Null Hypothesis and conclude that the result favors our Alternative Hypothesis. We conclude that the probability of the causation of power outage being severe weather is higher for states that are not in West side.
 
@@ -164,9 +163,3 @@ As a result, we calculated that **p-value on the Permutation Test is 0.0514**. W
 
 # optimal_hyperparameter_final_model
 <iframe src="assets/optimal_hyperparameter.html" width=700 height=500 frameBorder=0></iframe>
-=======
-
-**Conclusion**\
-As a result, we calculated that p-value on the Permutation Test is **0.0514**. With our significance level 0.1, despite being a small difference, the difference in accuracy across the two groups **is significant**.\
-This allows us to reject Null Hypothesis and conclude that the result favors our Alternative Hypothesis. We conclude that the probability of the causation of power outage being severe weather is higher for states that are not in West side.
->>>>>>> 9e1faebfbff1319f1a08858422ec127ceef26aa8
