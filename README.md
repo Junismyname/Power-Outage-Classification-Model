@@ -69,17 +69,17 @@ Moreover, we found in our data exploration that on average, more customers are a
 
 Since`CLIMATE.REGION`is qualitative, we must use **one hot encoding** to transform the categorical feature into several binary features.
 
-**Fit**\
+### Fit Model
 `pl = Pipeline([('preprocessor', preprocess_data),('dt', DecisionTreeClassifier(max_depth=3))])`\
 `pl.fit(X_train, y_train)`
 
-**Accuracy of Baseline Model Before GridSearchCV**\
+### Accuracy of Baseline Model Before GridSearchCV
 We used train test split method to see if our model can generalize to unseen data.\
 After transforming the columns and applying one hot encoding to categorical columns, the decision tree classifier achieves an **accuracy score of 0.63089.**
 
 Our current model does not perform well as it is miss-classifies nearly 0.36911 predictions.
 
-**Accuracy of Baseline Model After GridSearchCV**\
+### Accuracy of Baseline Model After GridSearchCV
 To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those hyperparameters to our Pipeline, we achieved an **accuracy 0.670157**.
 
 **Baseline Confusion Matrix**
@@ -91,22 +91,18 @@ Performing GridSearchCV on our baseline model increased the accuracy by roughly 
 
 We trained a decision tree classifier to predict CAUSE.CATEGORY by using two featured engineered columns and three original columns.
 
-**Feature Engineered:**
+### Two Feature Engineered Columns:
 
- **1. Devastating amount**
-
-Data type: Quantitative discrete data type
-
+**1. Devastating amount**\
+Data type: Quantitative discrete data type\
 We engineered a new feature that multiplies `CUSTOMERS.AFFECTED` with `OUTAGE.DURATION`. 
 Multiplying the two features has the synonymous affect of taking the **area** of how devastating an outage was. For example, an outage that has a long duration and affects a large group of people will have a larger area than an outage that last a short duration and affects small group of people. 
 
- **2. Mean customers affected by outages in certain seasonal climates in specific regions**
-
-Data type: Quantitative continous data type 
-
+**2. Mean customers affected by outages in certain seasonal climates in specific regions**\
+Data type: Quantitative continous data type\
 We engineered a new feature that takes the average customers affected during a certain seasonal period in a specific region. For example, the region West North Central has the least amount of customers affected by outages during a warm climate period. This makes sense, as power grids located in the West North Central are less likely to experience severe weather in warm climate periods. We performed this transformation by taking the mean of `CUSTOMERS.AFFECTED` after being grouped by `['CLIMATE.CATEGORY','CLIMATE.REGION']`.
 
-**Remaining Features:**
+### Remaining Features:
 
 3. `ANOMALY.LEVEL`: Quantitative continuous data
 3. `OUTAGE.DURATION`: Quantitative discrete data
