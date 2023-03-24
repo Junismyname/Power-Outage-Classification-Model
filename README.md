@@ -55,14 +55,16 @@ Our baseline model predicts cause of the power outage, `CAUSE.CATEGORY` using ba
 `CLIMATE.REGION`: Contains qualitative nominal data. Represents U.S. Climate regions as specified by National Centers for Environmental Information.\
 To use this data in our model, we changed it to numerical data using One Hot Encoding.\
 \
-**Baseline Model**
-Our baseline model used Decision Tree Classifier 
-We first organized collected data 
-Using all the data from introduced columns, we created pipeline to run One Hot Encoding for `CLIMATE.REGION` and predict `CAUSE.CATEGORY`.
-
+### Baseline Model
+We first input the collected data into Column Transformer use it in Pipeline. We kept all the numerical columns (`ANOMALY.LEVEL` and `OUTAGE.DURATION`) as they are, and modified the qualitative column `CLIMATE.REGION` using One Hot Encoder.\
+After creating Column Transformer with all the data, we initiated Pipeline along with Decision Tree Classifier. 
 **Prediction**
 We used train test split method to prove the accuracy of the Classifier.\
-Using pl.score(X_test, y_test) method, we calcultated R<sup>2</sup> to see the accuracy of the Classifier.\
+Using pl.score(X_test, y_test) method, we calcultated the accuracy of the Classifier.\
 As a result, we got 0.638743.\
-Our current model does extremely bad job at predicting the cause of power outages because our calculated R<sup>2</sup> shows that the Classifier is very inconsistent with prediction.\
+Our current model does extremely bad job at predicting the cause of power outages because our calculated accuracy shows that the Classifier is very inconsistent with prediction.\
 \
+
+**Gridsearch to find best hyperparameter**
+To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those values to our Pipeline, we got 0.670157.\
+This increased accuracy by about 0.04, which is a great improvement thinking that in term of probability. However we still considered our model inaccurate because we were aiming over 0.8 accuracy. 
