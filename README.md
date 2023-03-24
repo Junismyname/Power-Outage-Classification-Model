@@ -101,3 +101,65 @@ Red Line = Observed TVD
 
 **Conclusion**
 As a result, we calculated that **p-value on the Permutation Test is 0.0514**. With our significance level 0.1, despite being a small difference, the difference in accuracy across the two groups **is significant**. This allows us to reject Null Hypothesis and conclude that the result favors our Alternative Hypothesis. We conclude that the probability of the causation of power outage being severe weather is higher for states that are not in West side.
+
+# MODIFIED OUTAGE DF
+
+|   ANOMALY.LEVEL |   OUTAGE.DURATION | CLIMATE.REGION     |   CUSTOMERS.AFFECTED | CAUSE.CATEGORY     | CLIMATE.CATEGORY   | POSTAL.CODE   |
+|----------------:|------------------:|:-------------------|---------------------:|:-------------------|:-------------------|:--------------|
+|            -0.3 |              3060 | East North Central |                70000 | severe weather     | normal             | MN            |
+|            -0.1 |                 1 | East North Central |                 1790 | intentional attack | normal             | MN            |
+|            -1.5 |              3000 | East North Central |                70000 | severe weather     | cold               | MN            |
+|            -0.1 |              2550 | East North Central |                68200 | severe weather     | normal             | MN            |
+|             1.2 |              1740 | East North Central |               250000 | severe weather     | warm               | MN            |
+
+# CLIMATE CATEGORY & REGION CUSTOMERS AFFECTED
+
+
+| CLIMATE.CATEGORY   | CLIMATE.REGION     |   CUSTOMERS.AFFECTED |
+|--------------------|--------------------|----------------------|
+| cold               | Central            |              98794.7 |
+| cold               | East North Central |              98521.8 |
+| cold               | HI                 |             294000   |
+| cold               | Northeast          |             107051   |
+| cold               | Northwest          |              24056.5 |
+| cold               | South              |             128787   |
+| cold               | Southeast          |             138481   |
+| cold               | Southwest          |              53630.7 |
+| cold               | West               |             156325   |
+| cold               | West North Central |              55577.6 |
+| normal             | Central            |             137665   |
+| normal             | East North Central |             135104   |
+| normal             | HI                 |              45650   |
+| normal             | Northeast          |              97431.7 |
+| normal             | Northwest          |              25508.8 |
+| normal             | South              |             170177   |
+| normal             | Southeast          |             153197   |
+| normal             | Southwest          |              18916.5 |
+| normal             | West               |             135404   |
+| normal             | West North Central |              20328.4 |
+| warm               | Central            |              98845.8 |
+| warm               | East North Central |             101711   |
+| warm               | HI                 |             175443   |
+| warm               | Northeast          |             107387   |
+| warm               | Northwest          |              95453   |
+| warm               | South              |              94509.3 |
+| warm               | Southeast          |             266902   |
+| warm               | Southwest          |              40143.1 |
+| warm               | West               |             186607   |
+| warm               | West North Central |              15709.5 |
+
+
+# Baseline confusion Matrix
+<iframe src="assets/baseline_confusion_matrix.html" width=700 height=500 frameBorder=0></iframe>
+
+# Causality_customers
+<iframe src="assets/causality_customers_affected.html" width=700 height=500 frameBorder=0></iframe>
+
+# Customers_causality
+<iframe src="assets/customers_affected_causality.html" width=700 height=500 frameBorder=0></iframe>
+
+# histogram of anomaly level
+<iframe src="assets/histogram_anomaly.html" width=700 height=500 frameBorder=0></iframe>
+
+# optimal_hyperparameter_final_model
+<iframe src="assets/optimal_hyperparameter.html" width=700 height=500 frameBorder=0></iframe>
