@@ -51,17 +51,17 @@ From previous data exploration, we discovered that the missingness of 'CUSTOMERS
 |            -0.1 |              2550 | East North Central |                68200 | severe weather     | normal             | MN            |
 |             1.2 |              1740 | East North Central |               250000 | severe weather     | warm               | MN            |
 
-## Baseline Model
+# Baseline Model
 
 We trained a **decision tree classifier** to predict `CAUSE.CATEGORY` using 3 features from the dataset.
 
-**Reasoning behind our chosen features**
+**Reasoning Behind our Chosen Features**
 **Histogram: Anomaly Level**
 <iframe src="assets/histogram_anomaly.html" width=700 height=500 frameBorder=0></iframe>
 
-As shown on the scatter plot above, outages casued by intentional attacks seems to be clustered around -0.5 Anomoly Level while outages caused by severe weather seem to cluster between -0.5 and 0.0 Anomoly Level. Therefore, `ANOMALY.LEVEL` may be a handy feature for our classification model.
+As shown on the scatter plot above, outages casued by intentional attacks seems to be clustered around -0.5 Anomoly Level while outages caused by severe weather seem to cluster between -0.5 and 0.0 Anomoly Level. **Therefore, `ANOMALY.LEVEL` may be a handy feature for our classification model.**
 
-Moreover, we found in our data exploration that on average, more customers are affected by outages when the climate is warmer. This makes sense as warm temperatures accelerates evaporation into the atmosphere which becomes fuel for more powerful storms to develop. Thus, we believe `CLIMATE.REGION` may have a strong relationship with `CAUSE.CATEGORY` as certain regions experience warmer temperatures. 
+Moreover, we found in our data exploration that on average, more customers are affected by outages when the climate is warmer. This makes sense as warm temperatures accelerates evaporation into the atmosphere which becomes fuel for more powerful storms to develop. **Thus, we believe `CLIMATE.REGION` may have a strong relationship with `CAUSE.CATEGORY` as certain regions experience warmer temperatures.**
 
 ### Features for fitting model:
 1. `ANOMALY.LEVEL`: Quantitative continuous data\
@@ -74,13 +74,13 @@ Since`CLIMATE.REGION`is qualitative, we must use **one hot encoding** to transfo
 `pl = Pipeline([('preprocessor', preprocess_data),('dt', DecisionTreeClassifier(max_depth=3))])`\
 `pl.fit(X_train, y_train)`
 
-**Accuracy of Baseline Model before GridSearchCV**\
+**Accuracy of Baseline Model Before GridSearchCV**\
 We used train test split method to see if our model can generalize to unseen data.\
 After transforming the columns and applying one hot encoding to categorical columns, the decision tree classifier achieves an **accuracy score of 0.63089.**
 
 Our current model does not perform well as it is miss-classifying nearly 0.36911 predictions.
 
-**Gridsearch to find best hyperparameter**\
+**Accuracy of Baseline Model After GridSearchCV**\
 To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those hyperparameters to our Pipeline, we achieved an **accuracy 0.670157**.\
 
 **Baseline Confusion Matrix**
