@@ -97,25 +97,8 @@ We engineered a new feature that takes the average customers affected during a c
 
 Since`CLIMATE.REGION`is qualitative, we must use one hot encoding to transform the categorical feature into several binary features.
 
-`# Preprocess`
-`preprocess_data = ColumnTransformer(`
-`transformers= [`
-        `('cat_cols', OneHotEncoder(), ['CLIMATE.REGION']),`
-        `('keep_outage_duration',FunctionTransformer(),['CUSTOMERS.AFFECTED', 'OUTAGE.DURATION']),`
-        `('affected_region', mean_pipe, ['CLIMATE.CATEGORY','CLIMATE.REGION']),`
-        `('devastating_degree', prod_pipe, ['CUSTOMERS.AFFECTED', 'OUTAGE.DURATION']),`
-    `],`
-    `remainder = 'passthrough'`
-`)`
-`# Create pipeline`
-`pl = Pipeline([`
-    `('preprocessor', preprocess_data),`
-   ` ('dt', DecisionTreeClassifier(max_depth=3))`
-`])`
-`# Fit data on Decision Tree Classifier`
+`pl = Pipeline([('preprocessor', preprocess_data),('dt', DecisionTreeClassifier(max_depth=3))])`\
 `pl.fit(X_train, y_train)`
-`# Accuracy of Classifer`
-`pl.score(X_test, y_test)`
 
 After transforming the columns and applying one hot encoding to categorical columns, the decision tree classifier achieves an **accuracy score of 0.827225.**
 
