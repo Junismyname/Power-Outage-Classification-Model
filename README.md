@@ -39,3 +39,30 @@ Out of 1534 values, the ANOMALY.LEVEL columns contained 9 NaN values. Through da
 
 **5. Fill NaN values in 'CUSTOMERS.AFFECTED'**
 From previous data exploration, we discovered that the missingness of 'CUSTOMERS.AFFECTED' depends on ‘CAUSE.CATEGORY’ with a statistically significant p-value of 0.0.  Therefore, we imputed the mean 'CUSTOMERS.AFFECTED' conditioned on CAUSE.CATEGORY.
+
+## Baseline Model
+
+### Columns Used
+
+Our baseline model predicts cause of the power outage, `CAUSE.CATEGORY` using basic quantitative data and a qualitative data.\
+\
+**The columns we used to extract data are the following:**\
+\
+`ANOMALY.LEVEL`: Contains quantitative continuous data. Represents the oceanic El Niño/La Niña (ONI) index referring to the cold and warm episodes by season.\
+\
+`OUTAGE.DURATION`: Contains quantitative discrete data. Represents the duration of outage events in minutes.\
+\
+`CLIMATE.REGION`: Contains qualitative nominal data. Represents U.S. Climate regions as specified by National Centers for Environmental Information.\
+To use this data in our model, we changed it to numerical data using One Hot Encoding.\
+\
+**Baseline Model**
+Our baseline model used Decision Tree Classifier 
+We first organized collected data 
+Using all the data from introduced columns, we created pipeline to run One Hot Encoding for `CLIMATE.REGION` and predict `CAUSE.CATEGORY`.
+
+**Prediction**
+We used train test split method to prove the accuracy of the Classifier.\
+Using pl.score(X_test, y_test) method, we calcultated R<sup>2</sup> to see the accuracy of the Classifier.\
+As a result, we got 0.638743.\
+Our current model does extremely bad job at predicting the cause of power outages because our calculated R<sup>2</sup> shows that the Classifier is very inconsistent with prediction.\
+\
