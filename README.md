@@ -20,7 +20,8 @@ There are 1534 rows and 6 columns in the dataset that are relevant to our classi
 3. The column ‘ANOMALY.LEVEL’ contains the (ONI) index referring to the cold and warm episodes by season. Low anomaly levels may lead to more severe weather, causing power outages. 
 4. The column 'OUTAGE.DURATION’ marks duration of the outage in minutes. Outages caused by fuel supply emergency may last longer on average than other causes. 
 5. The column 'CUSTOMERS.AFFECTED’ counts the number of customers affected by the outage. Outages caused by severe weather (i.e. hurricanes or tornadoes) may affect more customers than outages caused by slanting which usually affects smaller groups of customers. 
-6. The column 'CLIMATE.CATEGORY' contains represents the climate episodes based on a threshold of ± 0.5 °C for the Oceanic Niño Index (ONI). Severe weathers such as hurricanes are more likely to happen during higher temperatures with warm gusts of winds. 
+6. The column `POSTAL.CODE` provides the location of which state the outage occured in.
+7. The column 'CLIMATE.CATEGORY' contains represents the climate episodes based on a threshold of ± 0.5 °C for the Oceanic Niño Index (ONI). Severe weathers such as hurricanes are more likely to happen during higher temperatures with warm gusts of winds. 
 
 ## Data Cleaning 
 
@@ -40,82 +41,7 @@ Out of 1534 values, the ANOMALY.LEVEL columns contained 9 NaN values. Through da
 **5. Fill NaN values in 'CUSTOMERS.AFFECTED'**
 From previous data exploration, we discovered that the missingness of 'CUSTOMERS.AFFECTED' depends on ‘CAUSE.CATEGORY’ with a statistically significant p-value of 0.0.  Therefore, we imputed the mean 'CUSTOMERS.AFFECTED' conditioned on CAUSE.CATEGORY.
 
-## Baseline Model
-
-### Columns Used
-
-Our baseline model predicts cause of the power outage, `CAUSE.CATEGORY` using basic quantitative data and a qualitative data.\
-\
-**The columns we used to extract data are the following:**\
-\
-`ANOMALY.LEVEL`: Contains quantitative continuous data. Represents the oceanic El Niño/La Niña (ONI) index referring to the cold and warm episodes by season.\
-\
-`OUTAGE.DURATION`: Contains quantitative discrete data. Represents the duration of outage events in minutes.\
-\
-`CLIMATE.REGION`: Contains qualitative nominal data. Represents U.S. Climate regions as specified by National Centers for Environmental Information.\
-To use this data in our model, we changed it to numerical data using One Hot Encoding.
-
-# Baseline Model
-We first input the collected data into Column Transformer use it in Pipeline. We kept all the numerical columns (`ANOMALY.LEVEL` and `OUTAGE.DURATION`) as they are, and modified the qualitative column `CLIMATE.REGION` using One Hot Encoder.\
-After creating Column Transformer with all the data, we initiated Pipeline along with Decision Tree Classifier.\
-**Prediction**\
-We used train test split method to prove the accuracy of the Classifier.\
-Using pl.score(X_test, y_test) method, we calcultated the accuracy of the Classifier.\
-As a result, we got 0.638743.\
-Our current model does extremely bad job at predicting the cause of power outages because our calculated accuracy shows that the Classifier is very inconsistent with prediction.
-
-
-**Gridsearch to find best hyperparameter**\
-To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those values to our Pipeline, we got 0.670157.\
-This increased accuracy by about 0.04, which is a great improvement thinking that in term of probability. However we still considered our model inaccurate because we were aiming over 0.8 accuracy.
-
-### Confusion Matrix
-Confusion Matrix below shows how many predictions we got it right using our baseline model. In the ideal prediction model, there should be only one non-zero entree, where the index and column name are the same. In the confusion matrix of our model, there are several non-zero values in each rows. It shows that our prediction model is inconsistent with the actual value.\
-\
-<iframe src="assets/baseline_confusion_matrix.html" width=700 height=500 frameBorder=0></iframe>
-
-## Final Model
-
-### Finding Optimal Hyperparameters
-In order for our model to **generalize** well on different datasets, we ideally want the model to have low bias and low model variance. We can use **GridSearchCV** to find the specific set of hyperparameters that does neither overfits or underfits the validation dataset.
-
-Therefore, we ran the Grid Search on 140 combinations of hyperparameters. A decision tree classifier with a high max depth will likly overfit while a low max depth will underfit the validation dataset. **Therefore, we need to find the set of (max_depth, min_samples_split, and criterion) that best generalizes for unseen datasets.**
-
-The hyperparameters with max average accuracy is one with a max_depth of 7,  min_samples_split of 2, and a criterion set to entropy. This set of hyperparameters **increased the accuracy from 0.8272 to 0.8664.**
-
-# Fairness Analysis
-
-We were curious to know if our model was fair in predicting the cause of outages for Western regions and Non-Western regions. 
-
-
-C: Decision Tree Classifier (1 if predicts severe weather as cause of outage , 0 if predicts otherwise) 
-
-Y: Whether or not cause of outage was truly because of severe weather (1) or due to other reason (0)
-
-A: Whether or not the outage occurred in western region (1) or non-western region (0) 
-
-
-Null Hypothesis: The classifier’s accuracy is the same for both western regions and non-western regions, and any differences are due to random chance.
-
-Alternative Hypothesis: The classifier’s accuracy is higher for western-regions. 
-
-**Relevant Columns**\
-The three main columns necessary to perform out Permutation Test is newly generated columns, `is_west` (True if the event happened in Western state, false otherwise), `is_severe` (Whether the causation of the outage is severe weather), and `prediction`, which is predicted `is_west` based on all the other columns we used to create our final model and the newly created columns. Since we are performing the test under the null hypothesis, we must generate our test statistic from shuffling the `is_west`.
-
-**Test Statistics**\
-After shuffling, we must find if Western and non-Western states have the same accuracy. To find that out, we decided to use **Difference in accuracy** on Western states and non-Western states. 
-
-Repeatedly computing the difference in accuracy will generate an empirical distribution of the difference under the null hypothesis. 
-
-**Empirical Distribution of Difference in Accuracy**\
-Red Line = Observed TVD
-
-<iframe src="assets/difference_in_accuracy_fairness.html" width=700 height=500 frameBorder=0></iframe>
-
-**Conclusion**
-As a result, we calculated that **p-value on the Permutation Test is 0.0514**. With our significance level 0.1, despite being a small difference, the difference in accuracy across the two groups **is significant**. This allows us to reject Null Hypothesis and conclude that the result favors our Alternative Hypothesis. We conclude that the probability of the causation of power outage being severe weather is higher for states that are not in West side.
-
-# MODIFIED OUTAGE DF
+### Cleaned DataFramed
 
 |   ANOMALY.LEVEL |   OUTAGE.DURATION | CLIMATE.REGION     |   CUSTOMERS.AFFECTED | CAUSE.CATEGORY     | CLIMATE.CATEGORY   | POSTAL.CODE   |
 |----------------:|------------------:|:-------------------|---------------------:|:-------------------|:-------------------|:--------------|
@@ -125,14 +51,166 @@ As a result, we calculated that **p-value on the Permutation Test is 0.0514**. W
 |            -0.1 |              2550 | East North Central |                68200 | severe weather     | normal             | MN            |
 |             1.2 |              1740 | East North Central |               250000 | severe weather     | warm               | MN            |
 
+## Baseline Model
 
+We trained a **decision tree classifier** to predict `CAUSE.CATEGORY` using 3 features from the dataset.
 
-# Causality_customers
-<iframe src="assets/causality_customers_affected.html" width=700 height=500 frameBorder=0></iframe>
+**Features for fitting model:**
+1. `ANOMALY.LEVEL`: Quantitative continuous data\
+3. `OUTAGE.DURATION`: Quantitative discrete data
+4. `CLIMATE.REGION`: Qualitative nominal data
 
+Since`CLIMATE.REGION`is qualitative, we must use **one hot encoding** to transform the categorical feature into several binary features.
 
-# histogram of anomaly level
+### Reasoning behind our chosen features 
+**Histogram: Anomaly Level**
 <iframe src="assets/histogram_anomaly.html" width=700 height=500 frameBorder=0></iframe>
 
-# optimal_hyperparameter_final_model
+As shown on the scatter plot above, outages casued by intentional attacks seems to be clustered around -0.5 Anomoly Level while outages caused by severe weather seem to cluster between -0.5 and 0.0 Anomoly Level. Therefore, `ANOMALY.LEVEL` may be a handy feature for our classification model.
+
+Moreover, we found in our data exploration that on average, more customers are affected by outages when the climate is warmer. This makes sense as warm temperatures accelerates evaporation into the atmosphere which becomes fuel for more powerful storms to develop. Thus, we believe `CLIMATE.REGION` may have a strong relationship with `CAUSE.CATEGORY` as certain regions experience warmer temperatures. 
+
+
+`pl = Pipeline([('preprocessor', preprocess_data),('dt', DecisionTreeClassifier(max_depth=3))])`\
+`pl.fit(X_train, y_train)`
+
+### Accuracy of Final Model before GridSearchCV
+We used train test split method to see if our model can generalize to unseen data.\
+After transforming the columns and applying one hot encoding to categorical columns, the decision tree classifier achieves an **accuracy score of 0.63089.**
+
+Our current model does not perform well as it is miss-classifying nearly 0.36911 predictions.
+
+**Gridsearch to find best hyperparameter**\
+To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those hyperparameters to our Pipeline, we achieved an accuracy 0.670157.\
+
+# Baseline confusion Matrix
+<iframe src="assets/baseline_confusion_matrix.html" width=700 height=500 frameBorder=0></iframe>
+
+Performing GridSearchCV on our baseline model increased the accuracy by roughly 0.04. However, our model has much room for improvment as it's classify nearly 0.329 of the cause of outage incorrectly.
+
+# Final Model
+
+We trained a decision tree classifier to predict CAUSE.CATEGORY by using two featured engineered columns and three original columns.
+
+**Feature Engineered:**
+
+ **1. Devastating amount**
+
+Data type: Quantitative discrete data type
+
+We engineered a new feature that multiplies `CUSTOMERS.AFFECTED` with `OUTAGE.DURATION`. 
+Multiplying the two features has the synonymous affect of taking the **area** of how devastating an outage was. For example, an outage that has a long duration and affects a large group of people will have a larger area than an outage that last a short duration and affects small group of people. 
+
+ **2. Mean customers affected by outages in certain seasonal climates in specific regions**
+
+Data type: Quantitative continous data type 
+
+We engineered a new feature that takes the average customers affected during a certain seasonal period in a specific region. For example, the region West North Central has the least amount of customers affected by outages during a warm climate period. This makes sense, as power grids located in the West North Central are less likely to experience severe weather in warm climate periods. We performed this transformation by taking the mean of `CUSTOMERS.AFFECTED` after being grouped by `['CLIMATE.CATEGORY','CLIMATE.REGION']`.
+
+**Remaining Features:**
+
+3. `ANOMALY.LEVEL`: Quantitative continuous data
+3. `OUTAGE.DURATION`: Quantitative discrete data
+5. `CUSTOMERS.AFFECTED`: Quantitative discrete data
+6. `CLIMATE.REGION`: Qualitative nominal data
+
+Since`CLIMATE.REGION`is qualitative, we must use one hot encoding to transform the categorical feature into several binary features.
+
+`pl = Pipeline([('preprocessor', preprocess_data),('dt', DecisionTreeClassifier(max_depth=3))])`\
+`pl.fit(X_train, y_train)`
+
+### Accuracy of Final Model before GridSearchCV
+After transforming the columns and applying one hot encoding to categorical columns, the decision tree classifier achieves an **accuracy score of 0.827225.**
+
+**Scatter PlotL: Affected Customer vs Outage Duration**
+<iframe src="assets/causality_customers_affected.html" width=700 height=500 frameBorder=0></iframe>
+
+### Why Feature Engineer (1) Improved Accuracy
+As shown in the scatter plot above, outages caused by severe weather usually have longer duration and affects larger amount of customers. Whereas, outages caused by system operability disruption usually affects large amounts of customers but has shorter duration. The new engineered feature captures this relationship and likely improves the accuracy.
+
+Multiplying the two features has the synonymous affect of taking the area of how devastating an outage was. For example, an outage that has a long duration and affects a large group of people will have a larger area than an outage that last a short duration and affects small group of people.
+
+**Scatter Plot: Affected Customers**
+<iframe src="assets/customers_affected_causality.html" width=700 height=500 frameBorder=0></iframe>
+
+### Why Feature Engineer(2) Improved Accuracy
+As shown in the scatter plot above, outages caused by severe weather usually affects a larger amount of people. Knowing this infromation, we engineered a new feature that takes the average customers affected during a certain seasonal period in a specific region. **This new features likely improves accuracy as certain regions under certain climate seasons might have more outages due to severe weather that affects larger amount of customers.**
+
+For example, as shown in the DataFrame below, Hawaii region during cold seasonal period had the largest amount of customers affected. To no suprise, the leading cause of outages in that group was severe weather. Hawaii during cold seasons often experience heavy winds and tropical storms. This may lead to outages that affects large amount of customers. This is a strong relationship that predicts the cause of outages. 
+
+| CLIMATE.CATEGORY   | CLIMATE.REGION     |   CUSTOMERS.AFFECTED |
+|--------------------|--------------------|----------------------|
+| cold               | Central            |              98794.7 |
+| cold               | East North Central |              98521.8 |
+| cold               | HI                 |             294000   |
+| cold               | Northeast          |             107051   |
+| cold               | Northwest          |              24056.5 |
+| cold               | South              |             128787   |
+| cold               | Southeast          |             138481   |
+| cold               | Southwest          |              53630.7 |
+| cold               | West               |             156325   |
+| cold               | West North Central |              55577.6 |
+| normal             | Central            |             137665   |
+| normal             | East North Central |             135104   |
+| normal             | HI                 |              45650   |
+| normal             | Northeast          |              97431.7 |
+| normal             | Northwest          |              25508.8 |
+| normal             | South              |             170177   |
+| normal             | Southeast          |             153197   |
+| normal             | Southwest          |              18916.5 |
+| normal             | West               |             135404   |
+| normal             | West North Central |              20328.4 |
+| warm               | Central            |              98845.8 |
+| warm               | East North Central |             101711   |
+| warm               | HI                 |             175443   |
+| warm               | Northeast          |             107387   |
+| warm               | Northwest          |              95453   |
+| warm               | South              |              94509.3 |
+| warm               | Southeast          |             266902   |
+| warm               | Southwest          |              40143.1 |
+| warm               | West               |             186607   |
+| warm               | West North Central |              15709.5 |
+
+
+### Finding Optimal Hyperparameters for Final Model
+In order for our model to **generalize** well on different datasets, we ideally want the model to have low bias and low model variance. We can use **GridSearchCV** to find the specific set of hyperparameters that does neither overfits or underfits the validation dataset.
+
+### Final Model Accuracy After GridSearchCV
+
+Therefore, we ran the Grid Search on 140 combinations of hyperparameters. A decision tree classifier with a high max depth will likly overfit while a low max depth will underfit the validation dataset. **Therefore, we need to find the set of (max_depth, min_samples_split, and criterion) that best generalizes for unseen datasets.**
+
 <iframe src="assets/optimal_hyperparameter.html" width=700 height=500 frameBorder=0></iframe>
+
+The hyperparameters with max average accuracy is one with a max_depth of 7, min_samples_split of 2, and a criterion set to entropy. This set of hyperparameters **increased the accuracy from 0.8272 to 0.8664.**
+
+
+
+# Fairness Analysis
+
+We were curious to know if our model was fair in predicting the cause of outages for Western regions and Non-Western regions. 
+
+**C**: Decision Tree Classifier (1 if predicts severe weather as cause of outage , 0 if predicts otherwise)\
+**Y**: Whether or not cause of outage was truly because of severe weather (1) or due to other reason (0)\
+**A**: Whether or not the outage occurred in western region (1) or non-western region (0)\
+
+**Null Hypothesis**: The classifier’s accuracy is the same for both western regions and non-western regions, and any differences are due to random chance.
+**Alternative Hypothesis**: The classifier’s accuracy is higher for western-regions. 
+
+**Relevant Columns**\
+The three main columns necessary to perform out Permutation Test is newly generated columns, `is_west` (True if the event happened in Western state, false otherwise), `is_severe` (Whether the causation of the outage is severe weather), and `prediction`, which is predicted `is_west` based on all the other columns we used to create our final model and the newly created columns. Since we are performing the test under the null hypothesis, we must generate our test statistic from shuffling the `is_west`.
+
+**Test Statistics**\
+After shuffling, we must find if Western and non-Western states have the same accuracy. 
+We decided to use **Difference in accuracy** on Western states and non-Western states. 
+
+Repeatedly computing the difference in accuracy will generate an empirical distribution of the difference under the null hypothesis. 
+
+**Empirical Distribution of Difference in Accuracy**\
+Red Line = Observed TVD
+
+<iframe src="assets/difference_in_accuracy_fairness.html" width=700 height=500 frameBorder=0></iframe>
+
+**p-value: 0.0514**
+
+**Conclusion**\
+The difference in accuracy across the two groups in not significant because the p-value is above the significance level of 0.05. **This means we fail to reject the null hypothesis, and C likely achieves accuracy parity.** Therefore, the classifier C is likely to be fair as it performs the same for outages that occurred in western regions and non-western regions 
