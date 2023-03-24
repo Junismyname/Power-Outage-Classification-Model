@@ -54,13 +54,12 @@ From previous data exploration, we discovered that the missingness of 'CUSTOMERS
 # Baseline Model
 
 We trained a **decision tree classifier** to predict `CAUSE.CATEGORY` using 3 features from the dataset.
-
-### Features for fitting model:
-1. `ANOMALY.LEVEL`: Quantitative continuous data\
+#### Chosen Features:
+1. `ANOMALY.LEVEL`: Quantitative continuous data
 3. `OUTAGE.DURATION`: Quantitative discrete data
 4. `CLIMATE.REGION`: Qualitative nominal data
 
-**Reasoning Behind our Chosen Features**\
+#### Reasoning Behind our Chosen Features\
 **Histogram: Anomaly Level**\
 <iframe src="assets/histogram_anomaly.html" width=700 height=500 frameBorder=0></iframe>
 
