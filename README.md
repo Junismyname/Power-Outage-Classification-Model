@@ -69,14 +69,13 @@ Our current model does extremely bad job at predicting the cause of power outage
 To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those values to our Pipeline, we got 0.670157.\
 This increased accuracy by about 0.04, which is a great improvement thinking that in term of probability. However we still considered our model inaccurate because we were aiming over 0.8 accuracy.
 
+### Confusion Matrix
+Confusion Matrix below shows how many predictions we got it right using our baseline model. In the ideal prediction model, there should be only one non-zero entree, where the index and column name are the same. In the confusion matrix of our model, there are several non-zero values in each rows. It shows that our prediction model is inconsistent with the actual value.\
+\
+<iframe src="assets/baseline_confusion_matrix.html" width=700 height=500 frameBorder=0></iframe>
+
 ## Final Model
 
-Clearly state your choice of Group X and Group Y, your evaluation metric, your null and alternative hypotheses, your choice of test statistic and significance level, the resulting p
--value, and your conclusion.
-
-Optional: Embed a visualization related to your permutation test in your website.
-
-Tip: When making writing your conclusions to the statistical tests in this project, never use language that implies an absolute conclusion; since we are performing statistical tests and not randomized controlled trials, we cannot prove that either hypothesis is 100% true or false.
 
 ## Fairness Analysis
 
@@ -156,9 +155,6 @@ As a result, we calculated that **p-value on the Permutation Test is 0.0514**. W
 | warm               | West               |             186607   |
 | warm               | West North Central |              15709.5 |
 
-
-# Baseline confusion Matrix
-<iframe src="assets/baseline_confusion_matrix.html" width=700 height=500 frameBorder=0></iframe>
 
 # Causality_customers
 <iframe src="assets/causality_customers_affected.html" width=700 height=500 frameBorder=0></iframe>
