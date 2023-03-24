@@ -22,7 +22,7 @@ There are 1534 rows and 6 columns in the dataset that are relevant to our classi
 5. The column 'CUSTOMERS.AFFECTED’ counts the number of customers affected by the outage. Outages caused by severe weather (i.e. hurricanes or tornadoes) may affect more customers than outages caused by slanting which usually affects smaller groups of customers. 
 6. The column 'CLIMATE.CATEGORY' contains represents the climate episodes based on a threshold of ± 0.5 °C for the Oceanic Niño Index (ONI). Severe weathers such as hurricanes are more likely to happen during higher temperatures with warm gusts of winds. 
 
-###Data Cleaning 
+### Data Cleaning 
 
 To ensure that the insights and conclusions drawn from the data are accurate and reliable, we cleaned our dataset in the following manner:
 **1. Excel to CSV Format**
