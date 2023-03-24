@@ -55,22 +55,22 @@ From previous data exploration, we discovered that the missingness of 'CUSTOMERS
 
 We trained a **decision tree classifier** to predict `CAUSE.CATEGORY` using 3 features from the dataset.
 
-**Reasoning Behind our Chosen Features**
-**Histogram: Anomaly Level**
+### Features for fitting model:
+1. `ANOMALY.LEVEL`: Quantitative continuous data\
+3. `OUTAGE.DURATION`: Quantitative discrete data
+4. `CLIMATE.REGION`: Qualitative nominal data
+
+**Reasoning Behind our Chosen Features**\
+**Histogram: Anomaly Level**\
 <iframe src="assets/histogram_anomaly.html" width=700 height=500 frameBorder=0></iframe>
 
 As shown on the scatter plot above, outages casued by intentional attacks seems to be clustered around -0.5 Anomoly Level while outages caused by severe weather seem to cluster between -0.5 and 0.0 Anomoly Level. **Therefore, `ANOMALY.LEVEL` may be a handy feature for our classification model.**
 
 Moreover, we found in our data exploration that on average, more customers are affected by outages when the climate is warmer. This makes sense as warm temperatures accelerates evaporation into the atmosphere which becomes fuel for more powerful storms to develop. **Thus, we believe `CLIMATE.REGION` may have a strong relationship with `CAUSE.CATEGORY` as certain regions experience warmer temperatures.**
 
-### Features for fitting model:
-1. `ANOMALY.LEVEL`: Quantitative continuous data\
-3. `OUTAGE.DURATION`: Quantitative discrete data
-4. `CLIMATE.REGION`: Qualitative nominal data
-
 Since`CLIMATE.REGION`is qualitative, we must use **one hot encoding** to transform the categorical feature into several binary features.
 
-**Fit**
+**Fit**\
 `pl = Pipeline([('preprocessor', preprocess_data),('dt', DecisionTreeClassifier(max_depth=3))])`\
 `pl.fit(X_train, y_train)`
 
@@ -78,7 +78,7 @@ Since`CLIMATE.REGION`is qualitative, we must use **one hot encoding** to transfo
 We used train test split method to see if our model can generalize to unseen data.\
 After transforming the columns and applying one hot encoding to categorical columns, the decision tree classifier achieves an **accuracy score of 0.63089.**
 
-Our current model does not perform well as it is miss-classifying nearly 0.36911 predictions.
+Our current model does not perform well as it is miss-classifies nearly 0.36911 predictions.
 
 **Accuracy of Baseline Model After GridSearchCV**\
 To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those hyperparameters to our Pipeline, we achieved an **accuracy 0.670157**.\
@@ -212,5 +212,5 @@ Red Line = Observed TVD
 
 **p-value: 0.0514**
 
-**Conclusion**\
+**Conclusion of Fairness Analysis**\
 The difference in accuracy across the two groups in not significant because the p-value is above the significance level of 0.05. **This means we fail to reject the null hypothesis, and C likely achieves accuracy parity.** Therefore, the classifier C is likely to be fair as it performs the same for outages that occurred in western regions and non-western regions 
