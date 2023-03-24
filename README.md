@@ -116,6 +116,8 @@ Multiplying the two features has the synonymous affect of taking the area of how
 ### Why Feature Engineer(2) Improved Accuracy
 As shown in the scatter plot above, outages caused by severe weather usually affects a larger amount of people. Knowing this infromation, we engineered a new feature that takes the average customers affected during a certain seasonal period in a specific region. **This new features will likely improve accuracy as certain regions under certain climate seasons might have more outages due to severe weather that affects larger amount of customers.**
 
+For example, as shown in the DataFrame below, Hawaii region during cold seasonal period had the largest amount of customers affected. To no suprise, the leading cause of outages in that group was severe weather. Hawaii during cold seasons often experience heavy winds and tropical storms. This may lead to outages that affects large amount of customers. This is a strong relationship that predicts the cause of outages. 
+
 | CLIMATE.CATEGORY   | CLIMATE.REGION     |   CUSTOMERS.AFFECTED |
 |--------------------|--------------------|----------------------|
 | cold               | Central            |              98794.7 |
@@ -149,7 +151,6 @@ As shown in the scatter plot above, outages caused by severe weather usually aff
 | warm               | West               |             186607   |
 | warm               | West North Central |              15709.5 |
 
-For example, Hawaii region during cold seasonal period had the largest amount of customers affected. To no suprise, the leading cause of outages in that group was severe weather. Hawaii during cold seasons often experience heavy winds and tropical storms. This may lead to outages that affects large amount of customers. This is a strong relationship that predicts the cause of outages. 
 
 ### Finding Optimal Hyperparameters
 In order for our model to **generalize** well on different datasets, we ideally want the model to have low bias and low model variance. We can use **GridSearchCV** to find the specific set of hyperparameters that does neither overfits or underfits the validation dataset.
