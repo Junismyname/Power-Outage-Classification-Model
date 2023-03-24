@@ -117,6 +117,56 @@ Since`CLIMATE.REGION`is qualitative, we must use one hot encoding to transform t
 `# Accuracy of Classifer`
 `pl.score(X_test, y_test)`
 
+After transforming the columns and applying one hot encoding to categorical columns, the decision tree classifier achieves an **accuracy score of 0.827225.**
+
+# Causality_customers
+<iframe src="assets/causality_customers_affected.html" width=700 height=500 frameBorder=0></iframe>
+
+##### Why Feature Engineer (1) Improved Accuracy
+As shown in the scatter plot above, outages caused by severe weather usually have longer duration and affects larger amount of customers. Whereas, outages caused by system operability disruption usually affects large amounts of customers but has shorter duration. The new engineered feature captures this relationship and likely improves the accuracy.
+
+Multiplying the two features has the synonymous affect of taking the area of how devastating an outage was. For example, an outage that has a long duration and affects a large group of people will have a larger area than an outage that last a short duration and affects small group of people.
+
+# Customers_causality
+<iframe src="assets/customers_affected_causality.html" width=700 height=500 frameBorder=0></iframe>
+
+##### Why Feature Engineer(2) Improved Accuracy
+As shown in the scatter plot above, larger number of customers are more likely to be affected by outages when it's caused by severe weather. Knowing this infromation, we engineered a new feature that takes the average customers affected during a certain seasonal period in a specific region. **This new features will likely improve accuracy as certain regions under certain climate seasons might have more outages due to severe weather that affects larger amount of customers.**
+
+| CLIMATE.CATEGORY   | CLIMATE.REGION     |   CUSTOMERS.AFFECTED |
+|--------------------|--------------------|----------------------|
+| cold               | Central            |              98794.7 |
+| cold               | East North Central |              98521.8 |
+| cold               | HI                 |             294000   |
+| cold               | Northeast          |             107051   |
+| cold               | Northwest          |              24056.5 |
+| cold               | South              |             128787   |
+| cold               | Southeast          |             138481   |
+| cold               | Southwest          |              53630.7 |
+| cold               | West               |             156325   |
+| cold               | West North Central |              55577.6 |
+| normal             | Central            |             137665   |
+| normal             | East North Central |             135104   |
+| normal             | HI                 |              45650   |
+| normal             | Northeast          |              97431.7 |
+| normal             | Northwest          |              25508.8 |
+| normal             | South              |             170177   |
+| normal             | Southeast          |             153197   |
+| normal             | Southwest          |              18916.5 |
+| normal             | West               |             135404   |
+| normal             | West North Central |              20328.4 |
+| warm               | Central            |              98845.8 |
+| warm               | East North Central |             101711   |
+| warm               | HI                 |             175443   |
+| warm               | Northeast          |             107387   |
+| warm               | Northwest          |              95453   |
+| warm               | South              |              94509.3 |
+| warm               | Southeast          |             266902   |
+| warm               | Southwest          |              40143.1 |
+| warm               | West               |             186607   |
+| warm               | West North Central |              15709.5 |
+
+For example, Hawaii region during cold seasonal period had the largest amount of customers affected. To no suprise, the leading cause of outages in that group was severe weather. Hawaii during cold seasons often experience heavy winds and tropical storms. This may lead to outages that affects large amount of customers. This is a strong relationship that predicts the cause of outages. 
 
 ## Fairness Analysis
 
@@ -158,51 +208,12 @@ The difference in accuracy across the two groups in not significant because the 
 |            -0.1 |              2550 | East North Central |                68200 | severe weather     | normal             | MN            |
 |             1.2 |              1740 | East North Central |               250000 | severe weather     | warm               | MN            |
 
-# CLIMATE CATEGORY & REGION CUSTOMERS AFFECTED
-
-
-| CLIMATE.CATEGORY   | CLIMATE.REGION     |   CUSTOMERS.AFFECTED |
-|--------------------|--------------------|----------------------|
-| cold               | Central            |              98794.7 |
-| cold               | East North Central |              98521.8 |
-| cold               | HI                 |             294000   |
-| cold               | Northeast          |             107051   |
-| cold               | Northwest          |              24056.5 |
-| cold               | South              |             128787   |
-| cold               | Southeast          |             138481   |
-| cold               | Southwest          |              53630.7 |
-| cold               | West               |             156325   |
-| cold               | West North Central |              55577.6 |
-| normal             | Central            |             137665   |
-| normal             | East North Central |             135104   |
-| normal             | HI                 |              45650   |
-| normal             | Northeast          |              97431.7 |
-| normal             | Northwest          |              25508.8 |
-| normal             | South              |             170177   |
-| normal             | Southeast          |             153197   |
-| normal             | Southwest          |              18916.5 |
-| normal             | West               |             135404   |
-| normal             | West North Central |              20328.4 |
-| warm               | Central            |              98845.8 |
-| warm               | East North Central |             101711   |
-| warm               | HI                 |             175443   |
-| warm               | Northeast          |             107387   |
-| warm               | Northwest          |              95453   |
-| warm               | South              |              94509.3 |
-| warm               | Southeast          |             266902   |
-| warm               | Southwest          |              40143.1 |
-| warm               | West               |             186607   |
-| warm               | West North Central |              15709.5 |
 
 
 # Baseline confusion Matrix
 <iframe src="assets/baseline_confusion_matrix.html" width=700 height=500 frameBorder=0></iframe>
 
-# Causality_customers
-<iframe src="assets/causality_customers_affected.html" width=700 height=500 frameBorder=0></iframe>
 
-# Customers_causality
-<iframe src="assets/customers_affected_causality.html" width=700 height=500 frameBorder=0></iframe>
 
 # histogram of anomaly level
 <iframe src="assets/histogram_anomaly.html" width=700 height=500 frameBorder=0></iframe>
