@@ -1,6 +1,6 @@
 # Power-Outage-Classification-Model
 
-## Introduction
+# Introduction
 
 Finding the cause of an outage may save a lot of time for repair workers. If they’re aware of the cause (i.e. severe weather, intentional attack, or equipment failure), workers may have a better idea of which equipments were more likely damaged during the event.
 
@@ -22,7 +22,7 @@ There are 1534 rows and 6 columns in the dataset that are relevant to our classi
 5. The column 'CUSTOMERS.AFFECTED’ counts the number of customers affected by the outage. Outages caused by severe weather (i.e. hurricanes or tornadoes) may affect more customers than outages caused by slanting which usually affects smaller groups of customers. 
 6. The column 'CLIMATE.CATEGORY' contains represents the climate episodes based on a threshold of ± 0.5 °C for the Oceanic Niño Index (ONI). Severe weathers such as hurricanes are more likely to happen during higher temperatures with warm gusts of winds. 
 
-### Data Cleaning 
+## Data Cleaning 
 
 To ensure that the insights and conclusions drawn from the data are accurate and reliable, we cleaned our dataset in the following manner:
 **1. Excel to CSV Format**
@@ -55,7 +55,7 @@ Our baseline model predicts cause of the power outage, `CAUSE.CATEGORY` using ba
 `CLIMATE.REGION`: Contains qualitative nominal data. Represents U.S. Climate regions as specified by National Centers for Environmental Information.\
 To use this data in our model, we changed it to numerical data using One Hot Encoding.
 
-### Baseline Model
+# Baseline Model
 We first input the collected data into Column Transformer use it in Pipeline. We kept all the numerical columns (`ANOMALY.LEVEL` and `OUTAGE.DURATION`) as they are, and modified the qualitative column `CLIMATE.REGION` using One Hot Encoder.\
 After creating Column Transformer with all the data, we initiated Pipeline along with Decision Tree Classifier.\
 **Prediction**\
@@ -69,7 +69,7 @@ Our current model does extremely bad job at predicting the cause of power outage
 To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those values to our Pipeline, we got 0.670157.\
 This increased accuracy by about 0.04, which is a great improvement thinking that in term of probability. However we still considered our model inaccurate because we were aiming over 0.8 accuracy.
 
-## Final Model
+# Final Model
 
 We trained a decision tree classifier to predict CAUSE.CATEGORY by using two featured engineered columns and three original columns.
 
@@ -110,7 +110,7 @@ As shown in the scatter plot above, outages caused by severe weather usually hav
 
 Multiplying the two features has the synonymous affect of taking the area of how devastating an outage was. For example, an outage that has a long duration and affects a large group of people will have a larger area than an outage that last a short duration and affects small group of people.
 
-#### Scatter Plot of Customer Affected
+#### Scatter Plot Affected Customers
 <iframe src="assets/customers_affected_causality.html" width=700 height=500 frameBorder=0></iframe>
 
 ### Why Feature Engineer(2) Improved Accuracy
@@ -159,7 +159,7 @@ Therefore, we ran the Grid Search on 140 combinations of hyperparameters. A deci
 
 The hyperparameters with max average accuracy is one with a max_depth of 7,  min_samples_split of 2, and a criterion set to entropy. This set of hyperparameters **increased the accuracy from 0.8272 to 0.8664.**
 
-## Fairness Analysis
+# Fairness Analysis
 
 We were curious to know if our model was fair in predicting the cause of outages for Western regions and Non-Western regions. 
 
