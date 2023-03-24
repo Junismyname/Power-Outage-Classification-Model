@@ -4,28 +4,28 @@
 
 Finding the cause of an outage may save a lot of time for repair workers. If they’re aware of the cause (i.e. severe weather, intentional attack, or equipment failure), workers may have a better idea of which equipments were more likely damaged during the event.
 
-For example, if severe winds were the cause of the outage, workers may focus their attention on large power lines or towers that most likely knocked down during high winds. Knowing this information 
+For example, if severe winds were the cause of the outage, workers may focus their attention on large power lines or towers that most likely knocked down during high winds. 
 
-Therefore, our goal is to predict the cause of outages using a multi-class classification model. 
+Therefore, our goal is to **predict the cause of outages** using a **multi-class classification** model. 
 
-We will use f1-score to evaluate the performance of our classification model. We chose f1-score over accuracy because our dataset is unbalanced (i.e. 49.74% of outages were due to severe weather). For our f1-score, we will take the weighted average because we want to assign greater contribution to classes with more examples in the dataset. 
+We will use **accuracy** to evaluate the performance of our classification model. We chose accuracy over f1-score because we are not performing a binary classification. Accuracy is sufficient metric to summarize the model's capability on multiclass classification.
 
 We will being using a dataset acquired from DOE׳s Office of Electricity Delivery and Energy Reliability and U.S. Energy Information Administration.
 
-Rows and Columns
+**Rows and Columns**
 
 There are 1534 rows and 6 columns in the dataset that are relevant to our classification model.
-1. The column ‘CAUSE.CATEGORY’ is our response variable (i.e. the variable we are predicting).
-2. The column 'CLIMATE.REGION' contains the region of where outages occurred. Some regions may be more susceptible to certain cause of outages. 
-3. The column ‘ANOMALY.LEVEL’ contains the (ONI) index referring to the cold and warm episodes by season. Low anomaly levels may lead to more severe weather, causing power outages. 
+1. The column `CAUSE.CATEGORY` is our response variable (i.e. the variable we are predicting).
+2. The column `CLIMATE.REGION` contains the region of where outages occurred. Some regions may be more susceptible to certain cause of outages. 
+3. The column `ANOMALY.LEVEL` contains the (ONI) index referring to the cold and warm episodes by season. Low anomaly levels may lead to more severe weather, causing power outages. 
 4. The column 'OUTAGE.DURATION’ marks duration of the outage in minutes. Outages caused by fuel supply emergency may last longer on average than other causes. 
-5. The column 'CUSTOMERS.AFFECTED’ counts the number of customers affected by the outage. Outages caused by severe weather (i.e. hurricanes or tornadoes) may affect more customers than outages caused by slanting which usually affects smaller groups of customers. 
+5. The column `CUSTOMERS.AFFECTED` counts the number of customers affected by the outage. Outages caused by severe weather (i.e. hurricanes or tornadoes) may affect more customers than outages caused by slanting which usually affects smaller groups of customers. 
 6. The column `POSTAL.CODE` provides the location of which state the outage occured in.
-7. The column 'CLIMATE.CATEGORY' contains represents the climate episodes based on a threshold of ± 0.5 °C for the Oceanic Niño Index (ONI). Severe weathers such as hurricanes are more likely to happen during higher temperatures with warm gusts of winds. 
+7. The column `CLIMATE.CATEGORY` contains represents the climate episodes based on a threshold of ± 0.5 °C for the Oceanic Niño Index (ONI). Severe weathers such as hurricanes are more likely to happen during higher temperatures with warm gusts of winds. 
 
 ## Data Cleaning 
 
-To ensure that the insights and conclusions drawn from the data are accurate and reliable, we cleaned our dataset in the following manner:
+To ensure that the insights and conclusions drawn from the data are accurate and reliable, we cleaned our dataset in the following manner:\
 **1. Excel to CSV Format**
 We converted the Excel file to CSV format. Since CSV only accepts data points separated by commas, we deleted the title and description in the Excel file so that the data is readable into pandas DataFrame.
 
@@ -55,14 +55,7 @@ From previous data exploration, we discovered that the missingness of 'CUSTOMERS
 
 We trained a **decision tree classifier** to predict `CAUSE.CATEGORY` using 3 features from the dataset.
 
-**Features for fitting model:**
-1. `ANOMALY.LEVEL`: Quantitative continuous data\
-3. `OUTAGE.DURATION`: Quantitative discrete data
-4. `CLIMATE.REGION`: Qualitative nominal data
-
-Since`CLIMATE.REGION`is qualitative, we must use **one hot encoding** to transform the categorical feature into several binary features.
-
-### Reasoning behind our chosen features 
+**Reasoning behind our chosen features**
 **Histogram: Anomaly Level**
 <iframe src="assets/histogram_anomaly.html" width=700 height=500 frameBorder=0></iframe>
 
@@ -70,20 +63,27 @@ As shown on the scatter plot above, outages casued by intentional attacks seems 
 
 Moreover, we found in our data exploration that on average, more customers are affected by outages when the climate is warmer. This makes sense as warm temperatures accelerates evaporation into the atmosphere which becomes fuel for more powerful storms to develop. Thus, we believe `CLIMATE.REGION` may have a strong relationship with `CAUSE.CATEGORY` as certain regions experience warmer temperatures. 
 
+### Features for fitting model:
+1. `ANOMALY.LEVEL`: Quantitative continuous data\
+3. `OUTAGE.DURATION`: Quantitative discrete data
+4. `CLIMATE.REGION`: Qualitative nominal data
 
+Since`CLIMATE.REGION`is qualitative, we must use **one hot encoding** to transform the categorical feature into several binary features.
+
+**Fit**
 `pl = Pipeline([('preprocessor', preprocess_data),('dt', DecisionTreeClassifier(max_depth=3))])`\
 `pl.fit(X_train, y_train)`
 
-### Accuracy of Final Model before GridSearchCV
+**Accuracy of Baseline Model before GridSearchCV**\
 We used train test split method to see if our model can generalize to unseen data.\
 After transforming the columns and applying one hot encoding to categorical columns, the decision tree classifier achieves an **accuracy score of 0.63089.**
 
 Our current model does not perform well as it is miss-classifying nearly 0.36911 predictions.
 
 **Gridsearch to find best hyperparameter**\
-To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those hyperparameters to our Pipeline, we achieved an accuracy 0.670157.\
+To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those hyperparameters to our Pipeline, we achieved an **accuracy 0.670157**.\
 
-# Baseline confusion Matrix
+**Baseline Confusion Matrix**
 <iframe src="assets/baseline_confusion_matrix.html" width=700 height=500 frameBorder=0></iframe>
 
 Performing GridSearchCV on our baseline model increased the accuracy by roughly 0.04. However, our model has much room for improvment as it's classify nearly 0.329 of the cause of outage incorrectly.
