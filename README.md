@@ -80,7 +80,7 @@ After transforming the columns and applying one hot encoding to categorical colu
 Our current model does not perform well as it is miss-classifies nearly 0.36911 predictions.
 
 **Accuracy of Baseline Model After GridSearchCV**\
-To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those hyperparameters to our Pipeline, we achieved an **accuracy 0.670157**.\
+To improve our model, we decided to do Gridsearch to find the best hyperparameter. Using GridSearchCV with hyperparameters for Decision Tree Classifier (max_depth, min_samples_splot, and criterion), we found out that the Classifier works the best when criterion as gini, max_depth as 10, and min_sampls_split as 100. Inputting those hyperparameters to our Pipeline, we achieved an **accuracy 0.670157**.
 
 **Baseline Confusion Matrix**
 <iframe src="assets/baseline_confusion_matrix.html" width=700 height=500 frameBorder=0></iframe>
