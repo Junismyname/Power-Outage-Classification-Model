@@ -71,34 +71,50 @@ This increased accuracy by about 0.04, which is a great improvement thinking tha
 
 ## Final Model
 
-Clearly state your choice of Group X and Group Y, your evaluation metric, your null and alternative hypotheses, your choice of test statistic and significance level, the resulting p
--value, and your conclusion.
+We trained a decision tree classifier to predict CAUSE.CATEGORY by using two featured engineered columns and three original columns.
 
-Optional: Embed a visualization related to your permutation test in your website.
+**Feature Engineered:**
 
-Tip: When making writing your conclusions to the statistical tests in this project, never use language that implies an absolute conclusion; since we are performing statistical tests and not randomized controlled trials, we cannot prove that either hypothesis is 100% true or false.
+ **1. Devastating amount**
+
+Data type: Quantitative discrete data type
+
+We engineered a new feature that multiplies `CUSTOMERS.AFFECTED` with `OUTAGE.DURATION`. 
+Multiplying the two features has the synonymous affect of taking the **area** of how devastating an outage was. For example, an outage that has a long duration and affects a large group of people will have a larger area than an outage that last a short duration and affects small group of people. 
+
+ **2. Mean customers affected by outages in certain seasonal climates in specific regions**
+
+Data type: Quantitative continous data type 
+
+We engineered a new feature that takes the average customers affected during a certain seasonal period in a specific region. For example, the region West North Central has the least amount of customers affected by outages during a warm climate period. This makes sense, as power grids located in the West North Central are less likely to experience severe weather in warm climate periods. We performed this transformation by taking the mean of `CUSTOMERS.AFFECTED` after being grouped by `['CLIMATE.CATEGORY','CLIMATE.REGION']`.
+
+**Remaining Features:**
+
+3. `ANOMALY.LEVEL`: Quantitative continuous data
+3. `OUTAGE.DURATION`: Quantitative discrete data
+5. `CUSTOMERS.AFFECTED`: Quantitative discrete data
+6. `CLIMATE.REGION`: Qualitative nominal data
+
+Since`CLIMATE.REGION`is qualitative, we must use one hot encoding to transform the categorical feature into several binary features.
+
 
 ## Fairness Analysis
 
 We were curious to know if our model was fair in predicting the cause of outages for Western regions and Non-Western regions. 
 
+**C**: Decision Tree Classifier (1 if predicts severe weather as cause of outage , 0 if predicts otherwise) 
+**Y**: Whether or not cause of outage was truly because of severe weather (1) or due to other reason (0)
+**A**: Whether or not the outage occurred in western region (1) or non-western region (0) 
 
-C: Decision Tree Classifier (1 if predicts severe weather as cause of outage , 0 if predicts otherwise) 
-
-Y: Whether or not cause of outage was truly because of severe weather (1) or due to other reason (0)
-
-A: Whether or not the outage occurred in western region (1) or non-western region (0) 
-
-
-Null Hypothesis: The classifier’s accuracy is the same for both western regions and non-western regions, and any differences are due to random chance.
-
-Alternative Hypothesis: The classifier’s accuracy is higher for western-regions. 
+**Null Hypothesis**: The classifier’s accuracy is the same for both western regions and non-western regions, and any differences are due to random chance.
+**Alternative Hypothesis**: The classifier’s accuracy is higher for western-regions. 
 
 **Relevant Columns**\
 The three main columns necessary to perform out Permutation Test is newly generated columns, `is_west` (True if the event happened in Western state, false otherwise), `is_severe` (Whether the causation of the outage is severe weather), and `prediction`, which is predicted `is_west` based on all the other columns we used to create our final model and the newly created columns. Since we are performing the test under the null hypothesis, we must generate our test statistic from shuffling the `is_west`.
 
 **Test Statistics**\
-After shuffling, we must find if Western and non-Western states have the same accuracy. To find that out, we decided to use **Difference in accuracy** on Western states and non-Western states. 
+After shuffling, we must find if Western and non-Western states have the same accuracy. 
+We decided to use **Difference in accuracy** on Western states and non-Western states. 
 
 Repeatedly computing the difference in accuracy will generate an empirical distribution of the difference under the null hypothesis. 
 
@@ -107,8 +123,10 @@ Red Line = Observed TVD
 
 <iframe src="assets/difference_in_accuracy_fairness.html" width=700 height=500 frameBorder=0></iframe>
 
+p-value: **0.0514**
+
 **Conclusion**
-As a result, we calculated that **p-value on the Permutation Test is 0.0514**. With our significance level 0.1, despite being a small difference, the difference in accuracy across the two groups **is significant**. This allows us to reject Null Hypothesis and conclude that the result favors our Alternative Hypothesis. We conclude that the probability of the causation of power outage being severe weather is higher for states that are not in West side.
+The difference in accuracy across the two groups in not significant because the p-value is above the significance level of 0.05. **This means we fail to reject the null hypothesis, and C likely achieves accuracy parity.** Therefore, the classifier C is likely to be fair as it performs the same for outages that occurred in western regions and non-western regions 
 
 # MODIFIED OUTAGE DF
 
