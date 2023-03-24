@@ -102,9 +102,9 @@ Since`CLIMATE.REGION`is qualitative, we must use one hot encoding to transform t
 
 We were curious to know if our model was fair in predicting the cause of outages for Western regions and Non-Western regions. 
 
-**C**: Decision Tree Classifier (1 if predicts severe weather as cause of outage , 0 if predicts otherwise) 
-**Y**: Whether or not cause of outage was truly because of severe weather (1) or due to other reason (0)
-**A**: Whether or not the outage occurred in western region (1) or non-western region (0) 
+**C**: Decision Tree Classifier (1 if predicts severe weather as cause of outage , 0 if predicts otherwise)\
+**Y**: Whether or not cause of outage was truly because of severe weather (1) or due to other reason (0)\
+**A**: Whether or not the outage occurred in western region (1) or non-western region (0)\
 
 **Null Hypothesis**: The classifier’s accuracy is the same for both western regions and non-western regions, and any differences are due to random chance.
 **Alternative Hypothesis**: The classifier’s accuracy is higher for western-regions. 
@@ -123,9 +123,9 @@ Red Line = Observed TVD
 
 <iframe src="assets/difference_in_accuracy_fairness.html" width=700 height=500 frameBorder=0></iframe>
 
-p-value: **0.0514**
+**p-value: 0.0514**
 
-**Conclusion**
+**Conclusion**\
 The difference in accuracy across the two groups in not significant because the p-value is above the significance level of 0.05. **This means we fail to reject the null hypothesis, and C likely achieves accuracy parity.** Therefore, the classifier C is likely to be fair as it performs the same for outages that occurred in western regions and non-western regions 
 
 # MODIFIED OUTAGE DF
