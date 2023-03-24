@@ -1,6 +1,6 @@
 # Power-Outage-Classification-Model
 
-## Introduction
+# Introduction
 
 Finding the cause of an outage may save a lot of time for repair workers. If they’re aware of the cause (i.e. severe weather, intentional attack, or equipment failure), workers may have a better idea of which equipments were more likely damaged during the event.
 
@@ -22,7 +22,7 @@ There are 1534 rows and 6 columns in the dataset that are relevant to our classi
 5. The column 'CUSTOMERS.AFFECTED’ counts the number of customers affected by the outage. Outages caused by severe weather (i.e. hurricanes or tornadoes) may affect more customers than outages caused by slanting which usually affects smaller groups of customers. 
 6. The column 'CLIMATE.CATEGORY' contains represents the climate episodes based on a threshold of ± 0.5 °C for the Oceanic Niño Index (ONI). Severe weathers such as hurricanes are more likely to happen during higher temperatures with warm gusts of winds. 
 
-### Data Cleaning 
+## Data Cleaning 
 
 To ensure that the insights and conclusions drawn from the data are accurate and reliable, we cleaned our dataset in the following manner:
 **1. Excel to CSV Format**
@@ -55,7 +55,7 @@ Our baseline model predicts cause of the power outage, `CAUSE.CATEGORY` using ba
 `CLIMATE.REGION`: Contains qualitative nominal data. Represents U.S. Climate regions as specified by National Centers for Environmental Information.\
 To use this data in our model, we changed it to numerical data using One Hot Encoding.
 
-### Baseline Model
+# Baseline Model
 We first input the collected data into Column Transformer use it in Pipeline. We kept all the numerical columns (`ANOMALY.LEVEL` and `OUTAGE.DURATION`) as they are, and modified the qualitative column `CLIMATE.REGION` using One Hot Encoder.\
 After creating Column Transformer with all the data, we initiated Pipeline along with Decision Tree Classifier.\
 **Prediction**\
@@ -76,8 +76,14 @@ Confusion Matrix below shows how many predictions we got it right using our base
 
 ## Final Model
 
+### Finding Optimal Hyperparameters
+In order for our model to **generalize** well on different datasets, we ideally want the model to have low bias and low model variance. We can use **GridSearchCV** to find the specific set of hyperparameters that does neither overfits or underfits the validation dataset.
 
-## Fairness Analysis
+Therefore, we ran the Grid Search on 140 combinations of hyperparameters. A decision tree classifier with a high max depth will likly overfit while a low max depth will underfit the validation dataset. **Therefore, we need to find the set of (max_depth, min_samples_split, and criterion) that best generalizes for unseen datasets.**
+
+The hyperparameters with max average accuracy is one with a max_depth of 7,  min_samples_split of 2, and a criterion set to entropy. This set of hyperparameters **increased the accuracy from 0.8272 to 0.8664.**
+
+# Fairness Analysis
 
 We were curious to know if our model was fair in predicting the cause of outages for Western regions and Non-Western regions. 
 
@@ -119,48 +125,11 @@ As a result, we calculated that **p-value on the Permutation Test is 0.0514**. W
 |            -0.1 |              2550 | East North Central |                68200 | severe weather     | normal             | MN            |
 |             1.2 |              1740 | East North Central |               250000 | severe weather     | warm               | MN            |
 
-# CLIMATE CATEGORY & REGION CUSTOMERS AFFECTED
-
-
-| CLIMATE.CATEGORY   | CLIMATE.REGION     |   CUSTOMERS.AFFECTED |
-|--------------------|--------------------|----------------------|
-| cold               | Central            |              98794.7 |
-| cold               | East North Central |              98521.8 |
-| cold               | HI                 |             294000   |
-| cold               | Northeast          |             107051   |
-| cold               | Northwest          |              24056.5 |
-| cold               | South              |             128787   |
-| cold               | Southeast          |             138481   |
-| cold               | Southwest          |              53630.7 |
-| cold               | West               |             156325   |
-| cold               | West North Central |              55577.6 |
-| normal             | Central            |             137665   |
-| normal             | East North Central |             135104   |
-| normal             | HI                 |              45650   |
-| normal             | Northeast          |              97431.7 |
-| normal             | Northwest          |              25508.8 |
-| normal             | South              |             170177   |
-| normal             | Southeast          |             153197   |
-| normal             | Southwest          |              18916.5 |
-| normal             | West               |             135404   |
-| normal             | West North Central |              20328.4 |
-| warm               | Central            |              98845.8 |
-| warm               | East North Central |             101711   |
-| warm               | HI                 |             175443   |
-| warm               | Northeast          |             107387   |
-| warm               | Northwest          |              95453   |
-| warm               | South              |              94509.3 |
-| warm               | Southeast          |             266902   |
-| warm               | Southwest          |              40143.1 |
-| warm               | West               |             186607   |
-| warm               | West North Central |              15709.5 |
 
 
 # Causality_customers
 <iframe src="assets/causality_customers_affected.html" width=700 height=500 frameBorder=0></iframe>
 
-# Customers_causality
-<iframe src="assets/customers_affected_causality.html" width=700 height=500 frameBorder=0></iframe>
 
 # histogram of anomaly level
 <iframe src="assets/histogram_anomaly.html" width=700 height=500 frameBorder=0></iframe>
