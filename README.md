@@ -102,19 +102,19 @@ Since`CLIMATE.REGION`is qualitative, we must use one hot encoding to transform t
 
 After transforming the columns and applying one hot encoding to categorical columns, the decision tree classifier achieves an **accuracy score of 0.827225.**
 
-# Causality_customers
+#### Scatter Plot of Customer Affected vs Outage Duration
 <iframe src="assets/causality_customers_affected.html" width=700 height=500 frameBorder=0></iframe>
 
-##### Why Feature Engineer (1) Improved Accuracy
+### Why Feature Engineer (1) Improved Accuracy
 As shown in the scatter plot above, outages caused by severe weather usually have longer duration and affects larger amount of customers. Whereas, outages caused by system operability disruption usually affects large amounts of customers but has shorter duration. The new engineered feature captures this relationship and likely improves the accuracy.
 
 Multiplying the two features has the synonymous affect of taking the area of how devastating an outage was. For example, an outage that has a long duration and affects a large group of people will have a larger area than an outage that last a short duration and affects small group of people.
 
-# Customers_causality
+#### Scatter Plot of Customer Affected
 <iframe src="assets/customers_affected_causality.html" width=700 height=500 frameBorder=0></iframe>
 
-##### Why Feature Engineer(2) Improved Accuracy
-As shown in the scatter plot above, larger number of customers are more likely to be affected by outages when it's caused by severe weather. Knowing this infromation, we engineered a new feature that takes the average customers affected during a certain seasonal period in a specific region. **This new features will likely improve accuracy as certain regions under certain climate seasons might have more outages due to severe weather that affects larger amount of customers.**
+### Why Feature Engineer(2) Improved Accuracy
+As shown in the scatter plot above, outages caused by severe weather usually affects a larger amount of people. Knowing this infromation, we engineered a new feature that takes the average customers affected during a certain seasonal period in a specific region. **This new features will likely improve accuracy as certain regions under certain climate seasons might have more outages due to severe weather that affects larger amount of customers.**
 
 | CLIMATE.CATEGORY   | CLIMATE.REGION     |   CUSTOMERS.AFFECTED |
 |--------------------|--------------------|----------------------|
@@ -150,6 +150,13 @@ As shown in the scatter plot above, larger number of customers are more likely t
 | warm               | West North Central |              15709.5 |
 
 For example, Hawaii region during cold seasonal period had the largest amount of customers affected. To no suprise, the leading cause of outages in that group was severe weather. Hawaii during cold seasons often experience heavy winds and tropical storms. This may lead to outages that affects large amount of customers. This is a strong relationship that predicts the cause of outages. 
+
+### Finding Optimal Hyperparameters
+In order for our model to **generalize** well on different datasets, we ideally want the model to have low bias and low model variance. We can use **GridSearchCV** to find the specific set of hyperparameters that does neither overfits or underfits the validation dataset.
+
+Therefore, we ran the Grid Search on 140 combinations of hyperparameters. A decision tree classifier with a high max depth will likly overfit while a low max depth will underfit the validation dataset. **Therefore, we need to find the set of (max_depth, min_samples_split, and criterion) that best generalizes for unseen datasets.**
+
+The hyperparameters with max average accuracy is one with a max_depth of 7,  min_samples_split of 2, and a criterion set to entropy. This set of hyperparameters **increased the accuracy from 0.8272 to 0.8664.**
 
 ## Fairness Analysis
 
