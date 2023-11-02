@@ -1,7 +1,5 @@
 # Power-Outage-Classification-Model
 
-## By Jun-Hee Hwang and Gabriel Cha
-
 # Introduction
 
 Finding the cause of an outage may save a lot of time for repair workers. If they’re aware of the cause (i.e. severe weather, intentional attack, or equipment failure), workers may have a better idea of which equipments were more likely damaged during the event.
