@@ -3,4 +3,4 @@ plugins:
 - jekyll-remote-theme # add this line to the plugins list if you already have one
 
 title: [Power Outage Classification Model]
-&description "By Jun-Hee Hwang and Gabriel Cha"
+description: "By Jun-Hee Hwang and Gabriel Cha"
